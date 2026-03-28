@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multi-Agent RAG — Chat</title>
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@400;500;600&display=swap" rel="stylesheet">
+    <!-- Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Markdown Parser -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <!-- Custom Style -->
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body class="dark-theme">
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <h3>🤖 Multi-Agent RAG</h3>
+            <button id="theme-toggle" title="Toggle Theme"><i data-lucide="moon"></i></button>
+        </div>
+        
+        <button id="new-chat-btn" class="sidebar-btn">
+            <i data-lucide="plus"></i> New Chat
+        </button>
+
+        <div class="sidebar-stats">
+            <div class="stat-item">
+                <span class="stat-label">Messages</span>
+                <span id="stat-messages" class="stat-value">0</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">Chunks</span>
+                <span id="stat-chunks" class="stat-value">0</span>
+            </div>
+        </div>
+
+        <div class="sidebar-section">
+            <p class="section-title">📁 Upload Documents</p>
+            <div class="file-upload-container">
+                <input type="file" id="file-input" multiple accept=".pdf" hidden>
+                <div id="drop-zone" class="drop-zone">
+                    <i data-lucide="upload-cloud"></i>
+                    <span>Drag & drop PDF</span>
+                    <button class="browse-btn">Browse</button>
+                </div>
+            </div>
+            <div id="file-list" class="file-list"></div>
+        </div>
+
+        <div class="sidebar-section">
+            <p class="section-title">Agents</p>
+            <div class="agent-legend">
+                <div class="agent-item math-agent">Math Agent</div>
+                <div class="agent-item rag-agent">RAG Agent</div>
+                <div class="agent-item memory-agent">Memory Agent</div>
+                <div class="agent-item general-agent">General Agent</div>
+                <div class="agent-item search-agent">Web Search Agent</div>
+            </div>
+        </div>
+
+        <div class="sidebar-footer">
+            <button id="download-chat-btn" class="sidebar-btn secondary" disabled>
+                <i data-lucide="download"></i> Download Chat
+            </button>
+        </div>
+    </div>
+
+    <main class="chat-container">
+        <!-- Welcome Screen Overlay -->
+        <div id="welcome-screen" class="welcome-screen">
+            <h1>Ready when you are.</h1>
+        </div>
+
+        <!-- Chat History -->
+        <div id="chat-messages" class="chat-messages"></div>
+
+        <!-- Sticky Chat Input Container -->
+        <div id="input-container-wrapper" class="input-container-wrapper welcome-mode">
+            <div class="chat-input-container">
+                <textarea id="user-input" placeholder="Ask anything..." rows="1"></textarea>
+                <button id="send-btn" disabled><i data-lucide="arrow-up"></i></button>
+            </div>
+        </div>
+    </main>
+
+    <script src="/static/script.js"></script>
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+    </script>
+</body>
+</html>
