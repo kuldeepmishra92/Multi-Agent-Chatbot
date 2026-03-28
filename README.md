@@ -1,8 +1,8 @@
-# Nexus: Multi-Agent RAG Orchestrator
+# Multi Agent Chatbot
 
-Nexus is a sophisticated AI-powered system designed for deep document reasoning and real-time information retrieval. Built on a modular, multi-agent architecture, it coordinates specialized LLM-driven agents to provide accurate, grounded, and up-to-date answers.
+Multi Agent Chatbot is a sophisticated AI-powered system designed for deep document reasoning and real-time information retrieval. Built on a modular, multi-agent architecture, it coordinates specialized LLM-driven agents to provide accurate, grounded, and up-to-date answers.
 
-![Nexus UI](C:\Users\kulde\.gemini\antigravity\brain\8c10ed46-8ce5-41d3-8b4e-edad6e824be9\final_verification_chatbot_1774686010530.png)
+![Chatbot UI](C:\Users\kulde\.gemini\antigravity\brain\8c10ed46-8ce5-41d3-8b4e-edad6e824be9\final_verification_chatbot_1774686010530.png)
 
 ## 🛠 Features
 
@@ -12,7 +12,7 @@ Nexus is a sophisticated AI-powered system designed for deep document reasoning 
     *   **Math Agent:** Handles complex calculations for higher accuracy.
     *   **Memory Agent:** Manages long-term conversational context across sessions.
 *   **Context-Aware RAG:** A hybrid retrieval pipeline using **ChromaDB** and PDF parsing to ground all answers in source documents.
-*   **Persistent SQLite Memory:** Unlike basic chatbots, Nexus remembers past interactions using a custom SQLite-backed memory layer.
+*   **Persistent SQLite Memory:** Unlike basic chatbots, this chatbot remembers past interactions using a custom SQLite-backed memory layer.
 *   **Real-Time Streaming UI:** Fast, token-by-token response rendering with a premium dark-themed interface built using Vanilla JS and CSS.
 *   **Automated Query Reformulation:** Reformulates natural language into optimized search strings before querying external APIs to ensure maximum precision.
 
