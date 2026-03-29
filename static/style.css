@@ -218,19 +218,134 @@ body {
     cursor: pointer;
 }
 
+/* Clear DB Button */
+.upload-actions {
+    margin-top: 1rem;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.clear-btn {
+    background: transparent;
+    color: #ef4444;
+    border: 1px solid rgba(239, 68, 68, 0.2);
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.2s;
+}
+
+.clear-btn:hover:not(:disabled) {
+    background: rgba(239, 68, 68, 0.1);
+    border-color: #ef4444;
+}
+
+.clear-btn:disabled {
+    opacity: 0.5;
+    cursor: default;
+}
+
+.clear-btn i {
+    width: 14px;
+    height: 14px;
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+.spin {
+    animation: spin 1s linear infinite;
+}
+
 .file-list {
     margin-top: 10px;
-    max-height: 120px;
+    max-height: 200px;
     overflow-y: auto;
+    padding-right: 5px;
+}
+
+.file-list::-webkit-scrollbar {
+    width: 4px;
+}
+.file-list::-webkit-scrollbar-thumb {
+    background: var(--border-color);
+    border-radius: 4px;
 }
 
 .file-item {
     font-size: 0.8rem;
-    padding: 4px 0;
-    color: var(--text-muted);
+    padding: 8px 10px;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 8px;
+    color: var(--text-color);
     display: flex;
     align-items: center;
-    gap: 6px;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 6px;
+    transition: background 0.2s;
+}
+
+.file-item:hover {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.file-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.file-info i {
+    flex-shrink: 0;
+    width: 16px;
+    height: 16px;
+    color: var(--accent-color);
+}
+
+.file-info span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.delete-file-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    padding: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    transition: all 0.2s;
+}
+
+.delete-file-btn:hover {
+    color: #ef4444;
+    background: rgba(239, 68, 68, 0.1);
+}
+
+.delete-file-btn i {
+    width: 14px;
+    height: 14px;
+}
+
+.empty-list {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    text-align: center;
+    padding: 1rem 0;
+    font-style: italic;
 }
 
 /* Agent Legend */

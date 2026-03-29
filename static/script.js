@@ -19,6 +19,7 @@ const fileInput = document.getElementById('file-input');
 const dropZone = document.getElementById('drop-zone');
 const fileList = document.getElementById('file-list');
 const downloadBtn = document.getElementById('download-chat-btn');
+const clearDbBtn = document.getElementById('clear-db-btn');
 
 // --- Initialization ---
 function init() {
@@ -30,6 +31,7 @@ function init() {
     }
     lucide.createIcons();
     updateStats();
+    loadIndexedDocuments(); // Initial load of files
     
     // Configure Marked options
     if (window.marked) {
@@ -93,6 +95,92 @@ newChatBtn.addEventListener('click', () => {
     statMessages.textContent = '0';
     downloadBtn.disabled = true;
 });
+
+clearDbBtn.addEventListener('click', async () => {
+    if (!confirm('Are you sure you want to clear the entire knowledge base? This will delete all indexed PDFs.')) {
+        return;
+    }
+    
+    try {
+        clearDbBtn.disabled = true;
+        clearDbBtn.innerHTML = '<i data-lucide="loader-2" class="spin"></i> Clearing...';
+        lucide.createIcons();
+        
+        const response = await fetch('/api/clear', { method: 'POST' });
+        const result = await response.json();
+        
+        if (response.ok) {
+            statChunks.textContent = '0';
+            alert(result.message);
+        } else {
+            alert('Error: ' + result.error);
+        }
+    } catch (err) {
+        console.error('Error clearing database:', err);
+        alert('Failed to clear knowledge base.');
+    } finally {
+        clearDbBtn.disabled = false;
+        clearDbBtn.innerHTML = '<i data-lucide="trash-2"></i> Clear Knowledge';
+        lucide.createIcons();
+        updateStats();
+        loadIndexedDocuments();
+    }
+});
+
+async function loadIndexedDocuments() {
+    try {
+        const response = await fetch('/api/documents');
+        const data = await response.json();
+        
+        fileList.innerHTML = ''; // Clear current list
+        
+        if (data.documents && data.documents.length > 0) {
+            data.documents.forEach(doc => {
+                const item = document.createElement('div');
+                item.className = 'file-item';
+                item.innerHTML = `
+                    <div class="file-info">
+                        <i data-lucide="file-text"></i>
+                        <span>${doc}</span>
+                    </div>
+                    <button class="delete-file-btn" onclick="deleteDocument('${doc}')" title="Delete ${doc}">
+                        <i data-lucide="x"></i>
+                    </button>
+                `;
+                fileList.appendChild(item);
+            });
+            lucide.createIcons();
+        } else {
+            fileList.innerHTML = '<p class="empty-list">No documents indexed</p>';
+        }
+    } catch (err) {
+        console.error('Error loading documents:', err);
+    }
+}
+
+async function deleteDocument(filename) {
+    if (!confirm(`Are you sure you want to delete '${filename}' from the knowledge base?`)) {
+        return;
+    }
+    
+    try {
+        const response = await fetch('/api/delete_document', {
+            method: 'DELETE',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ filename })
+        });
+        
+        const result = await response.json();
+        if (response.ok) {
+            updateStats();
+            loadIndexedDocuments();
+        } else {
+            alert('Error: ' + result.error);
+        }
+    } catch (err) {
+        console.error('Error deleting document:', err);
+    }
+}
 
 // --- Chat Logic ---
 async function sendMessage() {
@@ -299,14 +387,7 @@ async function handleFiles(files) {
     for (let f of files) {
         if (f.type !== 'application/pdf') continue;
         formData.append('files', f);
-        
-        // Add to UI list
-        const item = document.createElement('div');
-        item.className = 'file-item';
-        item.innerHTML = `<i data-lucide="file-text"></i> ${f.name}`;
-        fileList.appendChild(item);
     }
-    lucide.createIcons();
     
     // Show spinner in dropzone
     const originalText = dropZone.querySelector('span').textContent;
@@ -321,6 +402,7 @@ async function handleFiles(files) {
         if (data.error) throw new Error(data.error);
         
         updateStats();
+        loadIndexedDocuments();
         dropZone.querySelector('span').textContent = '✅ Success';
         setTimeout(() => dropZone.querySelector('span').textContent = originalText, 3000);
     } catch (e) {

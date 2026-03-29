@@ -79,3 +79,28 @@ def clear_store() -> None:
     store.delete_collection()
     _vector_store = None
     logger.warning("ChromaDB collection cleared.")
+
+def get_unique_sources() -> List[str]:
+    store = get_vector_store()
+    try:
+        # Fetch all metadatas to extract unique source names
+        results = store._collection.get(include=['metadatas'])
+        if not results or 'metadatas' not in results:
+            return []
+        
+        sources = {m.get('source') for m in results['metadatas'] if m and m.get('source')}
+        return sorted(list(sources))
+    except Exception as e:
+        logger.error(f"Error fetching unique sources: {e}")
+        return []
+
+def delete_source(source_name: str) -> bool:
+    store = get_vector_store()
+    try:
+        logger.info(f"Deleting document source: '{source_name}'")
+        store._collection.delete(where={"source": source_name})
+        logger.info(f"  → Document '{source_name}' removed from ChromaDB.")
+        return True
+    except Exception as e:
+        logger.error(f"Error deleting source '{source_name}': {e}")
+        return False

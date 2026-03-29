@@ -15,7 +15,7 @@ import config
 config.validate_config()
 
 from rag.document_loader import load_and_chunk_pdf
-from rag.vector_store    import add_documents, get_document_count
+from rag.vector_store    import add_documents, get_document_count, clear_store, get_unique_sources, delete_source
 from rag.retriever       import invalidate_bm25_cache
 from orchestrator.graph  import run_chat
 from utils.logger        import get_logger
@@ -82,6 +82,44 @@ def upload_files():
         "message": f"Successfully indexed {indexed_count} file(s)",
         "total_chunks": total_chunks
     })
+
+@app.route('/api/clear', methods=['POST'])
+def clear_database():
+    try:
+        clear_store()
+        invalidate_bm25_cache()
+        logger.info("Knowledge base cleared via API.")
+        return jsonify({"message": "Knowledge base cleared successfully", "total_chunks": 0})
+    except Exception as e:
+        logger.error(f"Error clearing knowledge base: {e}")
+        return jsonify({"error": str(e)}), 500
+
+@app.route('/api/documents', methods=['GET'])
+def get_documents():
+    try:
+        sources = get_unique_sources()
+        return jsonify({"documents": sources})
+    except Exception as e:
+        logger.error(f"Error getting documents: {e}")
+        return jsonify({"error": str(e)}), 500
+
+@app.route('/api/delete_document', methods=['DELETE'])
+def delete_document():
+    data = request.json
+    source_name = data.get('filename')
+    if not source_name:
+        return jsonify({"error": "Filename is required"}), 400
+    
+    try:
+        success = delete_source(source_name)
+        if success:
+            invalidate_bm25_cache()
+            return jsonify({"message": f"Document '{source_name}' deleted successfully"})
+        else:
+            return jsonify({"error": "Failed to delete document"}), 500
+    except Exception as e:
+        logger.error(f"Error during document deletion: {e}")
+        return jsonify({"error": str(e)}), 500
 
 @app.route('/api/chat', methods=['POST'])
 def chat():

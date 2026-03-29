@@ -64,3 +64,6 @@ Thumbs.db
 logs/
 temp/
 tmp/
+# Data and model files
+data/
+.streamlit/
