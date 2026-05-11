@@ -386,24 +386,27 @@ body {
 /* Desktop Sidebar Toggle */
 .desktop-sidebar-toggle {
     position: absolute;
-    top: 15px;
-    left: 15px;
-    background: transparent;
-    border: none;
-    color: var(--text-muted);
+    top: 12px;
+    left: 12px;
+    background: var(--sidebar-bg); /* Use sidebar bg to stand out */
+    border: 1px solid var(--border-color);
+    color: var(--text-color);
     cursor: pointer;
-    z-index: 40;
-    padding: 6px;
-    border-radius: 6px;
+    z-index: 200; /* Higher than sidebar */
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
     transition: all 0.2s;
     display: flex;
     align-items: center;
     justify-content: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
 }
 
 .desktop-sidebar-toggle:hover {
-    background: var(--border-color);
-    color: var(--text-color);
+    background: var(--input-bg);
+    border-color: var(--accent-color);
+    transform: scale(1.05);
 }
 
 .welcome-screen {
