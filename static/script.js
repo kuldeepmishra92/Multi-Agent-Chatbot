@@ -20,6 +20,11 @@ const dropZone = document.getElementById('drop-zone');
 const fileList = document.getElementById('file-list');
 const downloadBtn = document.getElementById('download-chat-btn');
 const clearDbBtn = document.getElementById('clear-db-btn');
+const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+const sidebarOverlay = document.getElementById('sidebar-overlay');
+const sidebar = document.querySelector('.sidebar');
+const mobileNewChatBtn = document.getElementById('mobile-new-chat-btn');
+const desktopSidebarToggle = document.getElementById('desktop-sidebar-toggle');
 
 // --- Initialization ---
 function init() {
@@ -55,6 +60,31 @@ themeToggle.addEventListener('click', () => {
     localStorage.setItem('theme', isDarkTheme ? 'dark' : 'light');
     lucide.createIcons();
 });
+
+// --- Mobile Sidebar Logic ---
+if (mobileMenuBtn && sidebarOverlay && sidebar) {
+    mobileMenuBtn.addEventListener('click', () => {
+        sidebar.classList.add('open');
+        sidebarOverlay.classList.add('active');
+    });
+
+    sidebarOverlay.addEventListener('click', () => {
+        sidebar.classList.remove('open');
+        sidebarOverlay.classList.remove('active');
+    });
+}
+
+if (mobileNewChatBtn) {
+    mobileNewChatBtn.addEventListener('click', () => {
+        if (newChatBtn) newChatBtn.click();
+    });
+}
+
+if (desktopSidebarToggle) {
+    desktopSidebarToggle.addEventListener('click', () => {
+        sidebar.classList.toggle('collapsed');
+    });
+}
 
 // --- UI Logic ---
 function handleWelcomeTransition() {
