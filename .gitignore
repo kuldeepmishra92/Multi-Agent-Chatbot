@@ -1,46 +1,61 @@
+# ==============================================================
 # Python
+# ==============================================================
 __pycache__/
 *.py[cod]
 *$py.class
 *.so
 .Python
 build/
-develop-eggs/
 dist/
-downloads/
-eggs/
-.eggs/
-lib/
-lib64/
-parts/
-sdist/
-var/
-wheels/
-share/python-wheels/
 *.egg-info/
-.installed.cfg
 *.egg
 MANIFEST
+.installed.cfg
 
-# Environments
-.env
-.venv
-env/
+# ==============================================================
+# Virtual Environments
+# ==============================================================
+.venv/
 venv/
+env/
 ENV/
-env.bak/
-venv.bak/
 
-# Project Specific
+# ==============================================================
+# Secrets & API Keys (NEVER commit these)
+# ==============================================================
+.env
+.streamlit/
+*.toml
+
+# ==============================================================
+# Deployment configs (platform-specific — not needed in repo)
+# ==============================================================
+vercel.json
+
+# ==============================================================
+# Project Data (auto-generated at runtime)
+# ==============================================================
+data/
 *.db
 *.sqlite3
-sessions.db
 chroma_db/
 vector_store/
-static/uploads/*
-!static/uploads/.gitkeep
+logs/
+tmp/
+temp/
 
+# ==============================================================
+# Internal Planning & Dev Notes (keep private)
+# ==============================================================
+PLAN.md
+TODO.md
+NOTES.md
+*.draft.md
+
+# ==============================================================
 # IDEs
+# ==============================================================
 .vscode/
 .idea/
 *.swp
@@ -49,7 +64,9 @@ static/uploads/*
 .pydevproject
 .settings/
 
-# OS
+# ==============================================================
+# OS generated files
+# ==============================================================
 .DS_Store
 .DS_Store?
 ._*
@@ -58,12 +75,8 @@ static/uploads/*
 ehthumbs.db
 Thumbs.db
 
-# Logs and Temps
+# ==============================================================
+# Logs and Temp files
+# ==============================================================
 *.log
 *.tmp
-logs/
-temp/
-tmp/
-# Data and model files
-data/
-.streamlit/
