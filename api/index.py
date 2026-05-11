@@ -131,20 +131,22 @@ def chat():
         return jsonify({"error": "Message is required"}), 400
 
     def generate():
-        start = time.perf_counter()
-        # In a real streaming implementation with LangGraph, we'd wrap the graph 
-        # but for simplicity we'll follow our existing logic which split by words
-        result = run_chat(query=query, session_id=session_id)
-        elapsed = round(time.perf_counter() - start, 2)
-        
-        # Metadata header (to inform the frontend about agent used and latency)
-        # We'll use a specific prefix to distinguish metadata from content
-        yield f"METADATA:{{\"agent\":\"{result['agent_used']}\", \"latency\":{elapsed}}}\n"
-        
-        words = result["response"].split(" ")
-        for i, w in enumerate(words):
-            yield w + (" " if i < len(words) - 1 else "")
-            time.sleep(0.015) # Simulated streaming for premium feel
+        try:
+            start = time.perf_counter()
+            result = run_chat(query=query, session_id=session_id)
+            elapsed = round(time.perf_counter() - start, 2)
+
+            yield f"METADATA:{{\"agent\":\"{result['agent_used']}\", \"latency\":{elapsed}}}\n"
+
+            words = result["response"].split(" ")
+            for i, w in enumerate(words):
+                yield w + (" " if i < len(words) - 1 else "")
+                time.sleep(0.015)
+
+        except Exception as e:
+            logger.error(f"[/api/chat] Error during generation: {e}", exc_info=True)
+            yield f"METADATA:{{\"agent\":\"Error\", \"latency\":0}}\n"
+            yield f"⚠️ Server error: {str(e)}"
 
     return Response(generate(), mimetype='text/event-stream')
 
